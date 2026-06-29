@@ -1,26 +1,182 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #d0e6dd;
+  --foreground: #111115;
+  --muted: #5e6863;
+  --border: rgba(17, 17, 21, 0.12);
+  --neon-cyan: #111115;
+  --neon-magenta: #5e6863;
+  --neon-blue: #222228;
+  --neon-green: #111115;
+  --neon-yellow: #44444a;
+  --accent: var(--neon-cyan);
+  --accent-hover: #222228;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-cyber: var(--font-orbitron), system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Custom cyber grid background - adjusted for light background */
+.cyber-grid {
+  background-image: 
+    linear-gradient(rgba(17, 17, 21, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 17, 21, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center;
+}
+
+.cyber-grid-coarse {
+  background-image: 
+    linear-gradient(rgba(17, 17, 21, 0.008) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 17, 21, 0.008) 1px, transparent 1px);
+  background-size: 150px 150px;
+  background-position: center;
+}
+
+/* Glassmorphism panel styling - white backdrop for light mode */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--border);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.glass-panel-hover:hover {
+  border-color: rgba(17, 17, 21, 0.25);
+  box-shadow: 0 0 25px rgba(17, 17, 21, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Noise overlay */
+.noise-overlay {
+  position: relative;
+}
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.02;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  z-index: 10;
+}
+
+/* Glowing text effects */
+.glow-text-cyan {
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.3);
+}
+
+.glow-text-magenta {
+  text-shadow: 0 0 10px rgba(247, 37, 133, 0.3);
+}
+
+/* Hide scrollbars but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tech scanner line animation */
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+.scanner-line {
+  animation: scan 6s linear infinite;
+}
+
+/* Custom Scrollbar for dashboard */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(3, 3, 7, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 212, 0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 212, 0.4);
+}
+
+@keyframes float-slow {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(40px, -60px) scale(1.1);
+  }
+  100% {
+    transform: translate(-20px, 30px) scale(0.95);
+  }
+}
+
+@keyframes float-slower {
+  0% {
+    transform: translate(0px, 0px) scale(1.15);
+  }
+  50% {
+    transform: translate(-60px, 40px) scale(0.95);
+  }
+  100% {
+    transform: translate(40px, -40px) scale(1.2);
+  }
+}
+
+@keyframes float-slowest {
+  0% {
+    transform: translate(0px, 0px) scale(0.9);
+  }
+  50% {
+    transform: translate(30px, 30px) scale(1.05);
+  }
+  100% {
+    transform: translate(-40px, -30px) scale(0.85);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 20s infinite alternate ease-in-out;
+}
+
+.animate-float-slower {
+  animation: float-slower 25s infinite alternate ease-in-out;
+}
+
+.animate-float-slowest {
+  animation: float-slowest 30s infinite alternate ease-in-out;
 }
