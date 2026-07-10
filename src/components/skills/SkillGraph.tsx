@@ -1,21 +1,22 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { skills, skillCategories } from "@/data/skills";
 import type { SkillNode } from "@/types";
 
+// Brightened accents that read on the dark deep-dive background.
 const CATEGORY_COLORS: Record<string, string> = {
-  "ai-ml": "#165c3b",
-  backend: "#1f4f6c",
-  frontend: "#4b5563",
-  data: "#6b5a3e",
-  cloud: "#3c4f76",
+  "ai-ml": "#00f5d4",
+  backend: "#5eb3ff",
+  frontend: "#c4b5fd",
+  data: "#fbbf77",
+  cloud: "#7dd3fc",
 };
 
-export function SkillGraph() {
-  const [hovered, setHovered] = useState<SkillNode | null>(null);
+const EASE = [0.16, 1, 0.3, 1] as const;
 
+export function SkillGraph() {
   const byCategory = useMemo(() => {
     const map: Record<string, SkillNode[]> = {};
     skillCategories.forEach((c) => (map[c.id] = []));
@@ -26,70 +27,67 @@ export function SkillGraph() {
   }, []);
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
-        {skillCategories.map((cat) => (
-          <span
-            key={cat.id}
-            className="rounded-full px-3 py-1 text-xs font-semibold"
-            style={{
-              backgroundColor: `${cat.color}15`,
-              color: cat.color,
-            }}
-          >
-            {cat.label}
-          </span>
-        ))}
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {skillCategories.map((cat) => (
-          <div key={cat.id} className="rounded-lg border border-black/5 bg-white/40 p-3">
-            <h5
-              className="mb-2 text-xs font-bold uppercase"
-              style={{ color: CATEGORY_COLORS[cat.id] || "#000" }}
+    <div className="space-y-6">
+      {/* Legend + quick counts */}
+      <div className="flex flex-wrap items-center gap-2">
+        {skillCategories.map((cat) => {
+          const color = CATEGORY_COLORS[cat.id];
+          return (
+            <span
+              key={cat.id}
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold border"
+              style={{ backgroundColor: `${color}12`, borderColor: `${color}40`, color }}
             >
+              <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
               {cat.label}
-            </h5>
-            <div className="flex flex-wrap gap-2">
-              {(byCategory[cat.id] ?? []).map((skill) => {
-                const isHovered = hovered?.id === skill.id;
-                return (
+              <span className="opacity-60">{(byCategory[cat.id] ?? []).length}</span>
+            </span>
+          );
+        })}
+        <span className="ml-auto font-mono text-[11px] text-gray-500">
+          {skills.length} capabilities · 5 domains
+        </span>
+      </div>
+
+      {/* Masonry of category cards — packs tightly so no lone card / gaps */}
+      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
+        {skillCategories.map((cat, ci) => {
+          const color = CATEGORY_COLORS[cat.id];
+          const items = byCategory[cat.id] ?? [];
+          return (
+            <motion.div
+              key={cat.id}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55, ease: EASE, delay: ci * 0.05 }}
+              className="mb-4 break-inside-avoid rounded-xl border border-white/10 bg-white/[0.02] p-4"
+            >
+              <div className="mb-3 flex items-center justify-between">
+                <h5 className="text-xs font-bold uppercase tracking-wider" style={{ color }}>
+                  {cat.label}
+                </h5>
+                <span className="font-mono text-[10px] text-gray-500">{items.length}</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {items.map((skill) => (
                   <motion.span
                     key={skill.id}
-                    onMouseEnter={() => setHovered(skill)}
-                    onMouseLeave={() => setHovered(null)}
-                    whileHover={{ scale: 1.05 }}
-                    className={`cursor-pointer rounded-md border px-2 py-1 text-xs transition ${
-                      isHovered ? "" : "border-black/5 bg-black/5 text-gray-700 hover:text-black"
-                    }`}
-                    style={isHovered ? {
-                      borderColor: CATEGORY_COLORS[skill.category],
-                      color: CATEGORY_COLORS[skill.category],
-                      backgroundColor: `${CATEGORY_COLORS[skill.category]}15`,
-                    } : undefined}
+                    whileHover={{ scale: 1.06 }}
+                    className="cursor-default rounded-md border px-2.5 py-1 text-xs text-gray-200 transition-colors"
+                    style={{
+                      borderColor: `${color}30`,
+                      backgroundColor: `${color}0d`,
+                    }}
                   >
                     {skill.label}
                   </motion.span>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+                ))}
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
-      {hovered && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="rounded-lg border border-black/10 bg-white/60 p-3 text-sm text-gray-700"
-        >
-          <span className="font-semibold" style={{ color: CATEGORY_COLORS[hovered.category] }}>
-            {hovered.label}
-          </span>
-          {hovered.description && (
-            <p className="mt-1 text-xs text-gray-600">{hovered.description}</p>
-          )}
-        </motion.div>
-      )}
     </div>
   );
 }

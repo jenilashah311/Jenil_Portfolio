@@ -68,7 +68,10 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 overflow-y-auto bg-black/60 backdrop-blur-md">
+      <div
+        data-lenis-prevent
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 overflow-y-auto bg-black/60 backdrop-blur-md"
+      >
         
         {/* Modal container */}
         <motion.div
@@ -102,7 +105,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
             {!isSent ? (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <p className="text-gray-700 text-xs leading-relaxed font-mono">
-                  // ENTER METADATA CHANNELS TO ROUTE DISPATCH DIRECTLY TO JENIL SHAH.
+                  {"// ENTER METADATA CHANNELS TO ROUTE DISPATCH DIRECTLY TO JENIL SHAH."}
                 </p>
 
                 <div className="space-y-1">

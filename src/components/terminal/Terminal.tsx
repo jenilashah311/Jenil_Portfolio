@@ -125,7 +125,7 @@ export function Terminal({ isOpen, onClose, onOpenResume }: TerminalProps) {
             ×
           </button>
         </div>
-        <div className="max-h-72 overflow-y-auto p-4 font-mono text-sm hide-scrollbar">
+        <div data-lenis-prevent className="max-h-72 overflow-y-auto p-4 font-mono text-sm hide-scrollbar">
           {log.map((entry, i) => (
             <div
               key={i}

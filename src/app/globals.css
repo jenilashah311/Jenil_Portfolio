@@ -27,13 +27,52 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Lenis controls scrolling; native smooth-behavior fights it. */
+  scroll-behavior: auto;
+}
+
+/* Lenis smooth-scroll baseline */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Never allow horizontal overflow at any zoom level / screen size */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+/* Media (images/svg) should always shrink to fit their container */
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+/* Utility: hairline that draws in */
+.gradient-line-cyan {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 245, 212, 0.6),
+    transparent
+  );
 }
 
 /* Custom cyber grid background - adjusted for light background */
