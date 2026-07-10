@@ -1,9 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import type { Project } from "@/types";
 import { ProjectCard } from "./ProjectCard";
+
+// useLayoutEffect warns during SSR; fall back to useEffect on the server.
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /**
  * Cinematic project showcase.
@@ -13,11 +16,32 @@ import { ProjectCard } from "./ProjectCard";
  */
 export function ProjectGallery({ projects }: { projects: Project[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: trackRef });
 
-  // Move the track from 0 to a negative offset that reveals the last card.
-  // 8 cards → shift far enough that the tail clears the viewport.
-  const x = useTransform(scrollYProgress, [0.05, 0.95], ["2%", "-82%"]);
+  // Measure how far the horizontal track actually overflows the viewport so the
+  // scroll ends exactly when the last card is revealed — no hardcoded overshoot.
+  const [distance, setDistance] = useState(0);
+
+  useIsoLayoutEffect(() => {
+    const measure = () => {
+      const el = innerRef.current;
+      if (!el) return;
+      // scrollWidth is the full content width; subtract the visible viewport.
+      setDistance(Math.max(0, el.scrollWidth - window.innerWidth));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (innerRef.current) ro.observe(innerRef.current);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [projects.length]);
+
+  // Translate from 0 to the exact overflow distance (in px).
+  const x = useTransform(scrollYProgress, [0.05, 0.95], [0, -distance]);
   const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
@@ -25,7 +49,7 @@ export function ProjectGallery({ projects }: { projects: Project[] }) {
       {/* ---------- Desktop: horizontal pinned scroll ---------- */}
       <div ref={trackRef} className="relative hidden md:block h-[360vh]">
         <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-          <motion.div style={{ x }} className="flex gap-8 pl-[8vw] pr-[8vw]">
+          <motion.div ref={innerRef} style={{ x }} className="flex gap-8 pl-[8vw] pr-[8vw]">
             {projects.map((project, i) => (
               <div key={project.id} className="w-[400px] shrink-0">
                 <ProjectCard project={project} index={i} />

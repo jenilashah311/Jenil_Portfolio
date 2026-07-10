@@ -12,7 +12,6 @@ import { profile } from "@/data/profile";
 import { experience, education, research } from "@/data/experience";
 import { projects } from "@/data/projects";
 import { StatsHUD } from "@/components/hud/StatsHUD";
-import { Terminal } from "@/components/terminal/Terminal";
 import { SkillGraph } from "@/components/skills/SkillGraph";
 import { ProjectGallery } from "@/components/projects/ProjectGallery";
 import { ResumeModal } from "@/components/resume/ResumeModal";
@@ -24,16 +23,14 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const SECTIONS = [
   { id: "hero", label: "SYSTEM", num: "01" },
-  { id: "console", label: "CONSOLE", num: "02" },
-  { id: "timeline", label: "CHRONOLOGY", num: "03" },
-  { id: "projects", label: "FLAGSHIPS", num: "04" },
-  { id: "skills", label: "CORE", num: "05" },
-  { id: "contact", label: "CONTACT", num: "06" },
+  { id: "timeline", label: "CHRONOLOGY", num: "02" },
+  { id: "projects", label: "FLAGSHIPS", num: "03" },
+  { id: "skills", label: "CORE", num: "04" },
+  { id: "contact", label: "CONTACT", num: "05" },
 ];
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState("hero");
-  const [terminalOpen, setTerminalOpen] = useState(false);
   const [resumeOpen, setResumeOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
@@ -144,16 +141,6 @@ export default function Home() {
             >
               SYS.RESUME
             </button>
-            <button
-              onClick={() => setTerminalOpen(true)}
-              className={`hidden sm:inline-block px-3 py-1.5 rounded border font-mono text-[10px] transition duration-700 ${
-                isDark
-                  ? "border-[#00f5d4]/30 bg-[#00f5d4]/10 text-[#00f5d4] hover:bg-[#00f5d4]/20"
-                  : "border-black/10 bg-black/5 text-black hover:bg-black/10"
-              }`}
-            >
-              SYS.TERM
-            </button>
 
             {/* Hamburger — shown below xl (tablet, phone, high zoom) */}
             <button
@@ -221,15 +208,6 @@ export default function Home() {
                 className="flex-1 py-3 rounded border border-white/15 bg-white/5 text-white font-mono text-xs"
               >
                 SYS.RESUME
-              </button>
-              <button
-                onClick={() => {
-                  setMenuOpen(false);
-                  setTerminalOpen(true);
-                }}
-                className="flex-1 py-3 rounded border border-[#00f5d4]/30 bg-[#00f5d4]/10 text-[#00f5d4] font-mono text-xs"
-              >
-                SYS.TERM
               </button>
             </div>
           </motion.div>
@@ -312,16 +290,10 @@ export default function Home() {
               <Reveal direction="up" delay={1} animateOnMount>
                 <div className="flex flex-wrap gap-4 pt-2">
                   <MagneticButton
-                    onClick={() => setTerminalOpen(true)}
-                    className="px-6 py-3 rounded-lg bg-black text-white font-cyber font-bold tracking-widest text-xs transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.18)] cursor-pointer"
-                  >
-                    INITIALIZE CONSOLE
-                  </MagneticButton>
-                  <MagneticButton
                     href={profile.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-3 rounded-lg border border-black/15 bg-black/5 font-cyber tracking-widest text-xs text-black transition duration-300 hover:bg-black/10 cursor-pointer"
+                    className="px-6 py-3 rounded-lg bg-black text-white font-cyber font-bold tracking-widest text-xs transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.18)] cursor-pointer"
                   >
                     GITHUB_ARCHIVES
                   </MagneticButton>
@@ -363,38 +335,10 @@ export default function Home() {
           </Reveal>
         </section>
 
-        {/* SECTION 2 — CONSOLE */}
-        <section id="console" className="max-w-5xl mx-auto w-full min-h-[55vh] flex flex-col justify-center py-20 scroll-mt-28">
-          <Reveal direction="up">
-            <div className="border border-black/5 bg-white/40 rounded-2xl p-6 md:p-8 backdrop-blur-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-black/5 rounded-full blur-[100px] pointer-events-none" />
-              <div className="space-y-4">
-                <span className="font-mono text-xs text-gray-500 tracking-widest uppercase">{"// 02. INTERACTIVE_TERMINAL"}</span>
-                <h3 className="font-cyber text-[clamp(1.4rem,5vw,1.9rem)] font-bold text-black tracking-wide break-words">
-                  EXECUTE QUERIES ON THE FLY
-                </h3>
-                <p className="text-gray-700 text-sm max-w-xl">
-                  Deploy automated scripts or view system diagnostics. Initialize the terminal
-                  utility and run live commands like <code className="text-black font-mono">whoami</code>,{" "}
-                  <code className="text-black font-mono">projects</code>, or <code className="text-black font-mono">skills</code>.
-                </p>
-                <div className="pt-6">
-                  <MagneticButton
-                    onClick={() => setTerminalOpen(true)}
-                    className="inline-block px-6 py-3 rounded-lg border border-black/20 bg-black/5 font-cyber font-bold tracking-widest text-xs text-black transition hover:bg-black/10 cursor-pointer"
-                  >
-                    LOAD_TERMINAL_INTERFACE
-                  </MagneticButton>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </section>
-
-        {/* SECTION 3 — TIMELINE */}
+        {/* SECTION 2 — TIMELINE */}
         <section id="timeline" className="max-w-5xl mx-auto w-full py-20 scroll-mt-28" ref={timelineRef}>
           <Reveal mask>
-            <span className="font-mono text-xs text-gray-500 tracking-widest uppercase">{"// 03. CHRONOLOGY"}</span>
+            <span className="font-mono text-xs text-gray-500 tracking-widest uppercase">{"// 02. CHRONOLOGY"}</span>
           </Reveal>
           <Reveal mask>
             <h3 className="font-cyber text-[clamp(1.7rem,6vw,2.5rem)] font-bold text-black tracking-wide break-words mt-2 mb-12">
@@ -511,7 +455,7 @@ export default function Home() {
         <section id="projects" className="scroll-mt-28">
           <div className="max-w-5xl mx-auto px-6 pt-10">
             <Reveal mask>
-              <span className="font-mono text-xs text-[#00f5d4]/80 tracking-widest uppercase">{"// 04. FLAGSHIPS"}</span>
+              <span className="font-mono text-xs text-[#00f5d4]/80 tracking-widest uppercase">{"// 03. FLAGSHIPS"}</span>
             </Reveal>
             <Reveal mask>
               <h3 className="font-cyber text-[clamp(1.7rem,6vw,3rem)] font-bold tracking-wide break-words mt-2 text-white">
@@ -526,7 +470,7 @@ export default function Home() {
         <section id="skills" className="py-24 scroll-mt-28">
           <div className="max-w-5xl mx-auto px-6">
             <Reveal mask>
-              <span className="font-mono text-xs text-[#00f5d4]/80 tracking-widest uppercase">{"// 05. CORE"}</span>
+              <span className="font-mono text-xs text-[#00f5d4]/80 tracking-widest uppercase">{"// 04. CORE"}</span>
             </Reveal>
             <Reveal mask>
               <h3 className="font-cyber text-[clamp(1.7rem,6vw,3rem)] font-bold tracking-wide break-words mt-2 mb-12 text-white">
@@ -545,7 +489,7 @@ export default function Home() {
         <section id="contact" className="py-24 scroll-mt-28">
           <div className="max-w-5xl mx-auto px-6">
             <Reveal mask>
-              <span className="font-mono text-xs text-[#00f5d4]/80 tracking-widest uppercase">{"// 06. CONTACT"}</span>
+              <span className="font-mono text-xs text-[#00f5d4]/80 tracking-widest uppercase">{"// 05. CONTACT"}</span>
             </Reveal>
             <Reveal mask>
               <h3 className="font-cyber text-[clamp(1.7rem,6vw,3rem)] font-bold tracking-wide break-words mt-2 mb-12 text-white">
@@ -620,7 +564,6 @@ export default function Home() {
       </div>
 
       {/* Modals */}
-      <Terminal isOpen={terminalOpen} onClose={() => setTerminalOpen(false)} onOpenResume={() => setResumeOpen(true)} />
       <ResumeModal isOpen={resumeOpen} onClose={() => setResumeOpen(false)} />
       <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
     </div>
